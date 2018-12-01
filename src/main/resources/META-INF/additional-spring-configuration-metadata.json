@@ -1,0 +1,73 @@
+{
+  "properties": [
+    {
+      "name": "email.resource",
+      "type": "java.lang.String",
+      "description": "Description for email.resource."
+    },
+    {
+      "name": "email.should.delete.message",
+      "type": "java.lang.String",
+      "description": "Description for email.should.delete.message."
+    },
+    {
+      "name": "mq.connection",
+      "type": "java.lang.String",
+      "description": "Description for mq.connection."
+    },
+    {
+      "name": "mq.concurrency",
+      "type": "java.lang.String",
+      "description": "Description for mq.concurrency."
+    },
+    {
+      "name": "mq.username",
+      "type": "java.lang.String",
+      "description": "Description for mq.username."
+    },
+    {
+      "name": "mq.password",
+      "type": "java.lang.String",
+      "description": "Description for mq.password."
+    },
+    {
+      "name": "email.local.folder.attachments.saved",
+      "type": "java.lang.String",
+      "description": "Description for email.local.folder.attachments.saved."
+    },
+    {
+      "name": "mq.outbound.queue",
+      "type": "java.lang.String",
+      "description": "Description for mq.outbound.queue."
+    },
+    {
+      "name": "email.mail.props.debug",
+      "type": "java.lang.String",
+      "description": "Description for email.mail.props.debug."
+    },
+    {
+      "name": "email.mail.props.store.protocol",
+      "type": "java.lang.String",
+      "description": "Description for email.mail.props.store.protocol."
+    },
+    {
+      "name": "email.mail.props.imap.socketFactory.fallback",
+      "type": "java.lang.String",
+      "description": "Description for email.mail.props.imap.socketFactory.fallback."
+    },
+    {
+      "name": "email.mail.props.imap.socketFactory.class",
+      "type": "java.lang.String",
+      "description": "Description for email.mail.props.imap.socketFactory.class."
+    },
+    {
+      "name": "email.local.save",
+      "type": "java.lang.String",
+      "description": "Description for email.local.save."
+    },
+    {
+      "name": "email.local.maxFilenameLength",
+      "type": "java.lang.String",
+      "description": "Description for email.local.maxFilenameLength."
+    }
+  ] }

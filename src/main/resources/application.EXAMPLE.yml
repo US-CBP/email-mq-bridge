@@ -1,0 +1,14 @@
+email.resource: imaps://[email-username]:[email password]@imap.gmail.com:993/inbox
+email.mail.props.imap.socketFactory.class: javax.net.ssl.SSLSocketFactory
+email.mail.props.imap.socketFactory.fallback: false
+email.mail.props.store.protocol: imaps
+email.mail.props.debug: false
+email.should.delete.message: false
+email.local.folder.attachments.saved: D:/Attachment/
+email.local.save: true
+email.local.maxFilenameLength: 254
+mq.connection: tcp://localhost:61616
+mq.outbound.queue: GTAS_INBOUND_Q_REDIS
+mq.concurrency: 1-1
+mq.username:
+mq.password:
