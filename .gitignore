@@ -27,5 +27,7 @@
 ### Application Properties File Should never be commited! ###
 /src/main/resources/application.yml
 
+###Ignoring Maven Configs###
+/.mvn/
 mvnw
 mvnw.cmd

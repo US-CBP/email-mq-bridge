@@ -6,7 +6,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.integration.mail.*;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.integration.mail.ImapMailReceiver;
+import org.springframework.integration.mail.MailReceiver;
+import org.springframework.integration.mail.MailReceivingMessageSource;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
 import java.util.Properties;
@@ -22,6 +26,9 @@ public class EmailConfiguration {
     @Value("${email.should.delete.message}")
     Boolean shouldDeleteMessage;
 
+    @Value("${email.maxProcessedMessagesPerPoll}")
+    Integer maxProcessedMessagesPerPoll;
+
     private final
     Properties javaMailProperties;
 
@@ -32,15 +39,23 @@ public class EmailConfiguration {
 
     @Bean
     @Qualifier("inboundMessageAdapter")
-    ImapIdleChannelAdapter imapIdleChannelAdapter() {
-        return new ImapIdleChannelAdapter(imapMailReceiver());
+    MailReceivingMessageSource mailReceivingMessageSource() {
+        return new MailReceivingMessageSource(imapMailReceiver());
     }
 
     @Bean
-    ImapMailReceiver imapMailReceiver() {
+    MailReceiver imapMailReceiver() {
         ImapMailReceiver imapMailReceiver = new ImapMailReceiver(emailUrl);
         imapMailReceiver.setShouldDeleteMessages(shouldDeleteMessage);
         imapMailReceiver.setJavaMailProperties(javaMailProperties);
         return imapMailReceiver;
+    }
+
+    @Bean
+    @Qualifier("emailTaskExecutor")
+    TaskExecutor taskExecutor() {
+        ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
+        taskExecutor.setCorePoolSize(maxProcessedMessagesPerPoll);
+        return taskExecutor;
     }
 }

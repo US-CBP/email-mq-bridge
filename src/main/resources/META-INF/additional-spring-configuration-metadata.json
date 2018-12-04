@@ -69,5 +69,15 @@
       "name": "email.local.maxFilenameLength",
       "type": "java.lang.String",
       "description": "Description for email.local.maxFilenameLength."
+    },
+    {
+      "name": "email.maxProcessedMessagesPerPoll",
+      "type": "java.lang.String",
+      "description": "Description for email.maxProcessedMessagesPerPoll."
+    },
+    {
+      "name": "email.pollTimeInSeconds",
+      "type": "java.lang.String",
+      "description": "Description for email.pollTimeInSeconds."
     }
   ] }

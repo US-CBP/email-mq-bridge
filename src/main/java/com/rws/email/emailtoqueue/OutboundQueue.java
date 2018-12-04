@@ -25,24 +25,13 @@ public class OutboundQueue {
 
     void putAttachmentsOnQueue(Map<String, String> attachmentNameAsKeyAttachmentAsValue) {
         for (String attachmentName : attachmentNameAsKeyAttachmentAsValue.keySet()) {
-            try {
-                String payload = attachmentNameAsKeyAttachmentAsValue.get(attachmentName);
-                payload = stripNewLineAndCarriageReturn(payload);
-                Message message  = MessageBuilder
-                        .withPayload(payload)
-                        .setHeader("filename", attachmentName)
-                        .build();
-                jmsTemplateFile.convertAndSend(message);
-                logger.info("Put attachment on queue.");
-            } catch (Exception ex) {
-                logger.error("Error forwarding message", ex);
-            }
+            String payload = attachmentNameAsKeyAttachmentAsValue.get(attachmentName);
+            Message message = MessageBuilder
+                    .withPayload(payload)
+                    .setHeader("filename", attachmentName)
+                    .build();
+            jmsTemplateFile.convertAndSend(message);
+            logger.info("Put attachment on queue.");
         }
-    }
-
-    private String stripNewLineAndCarriageReturn(String attachment) {
-        attachment = attachment.replaceAll("\\n", "");
-        attachment = attachment.replaceAll("\\r", "");
-        return attachment;
     }
 }
