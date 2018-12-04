@@ -32,9 +32,13 @@ public class EmailConfiguration {
     private final
     Properties javaMailProperties;
 
+    private final
+    ReceiverSearchTerms receiverSearchTerms;
+
     @Autowired
-    public EmailConfiguration(@Qualifier("javaProperties") Properties javaMailProperties) {
+    public EmailConfiguration(@Qualifier("javaProperties") Properties javaMailProperties, ReceiverSearchTerms receiverSearchTerms) {
         this.javaMailProperties = javaMailProperties;
+        this.receiverSearchTerms = receiverSearchTerms;
     }
 
     @Bean
@@ -48,6 +52,7 @@ public class EmailConfiguration {
         ImapMailReceiver imapMailReceiver = new ImapMailReceiver(emailUrl);
         imapMailReceiver.setShouldDeleteMessages(shouldDeleteMessage);
         imapMailReceiver.setJavaMailProperties(javaMailProperties);
+        imapMailReceiver.setSearchTermStrategy(receiverSearchTerms);
         return imapMailReceiver;
     }
 
@@ -58,4 +63,5 @@ public class EmailConfiguration {
         taskExecutor.setCorePoolSize(maxProcessedMessagesPerPoll);
         return taskExecutor;
     }
+
 }
