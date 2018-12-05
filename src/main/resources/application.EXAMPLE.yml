@@ -3,14 +3,13 @@ email.mail.props.imap.socketFactory.class: javax.net.ssl.SSLSocketFactory
 email.mail.props.imap.socketFactory.fallback: false
 email.mail.props.store.protocol: imaps
 email.mail.props.debug: false
+email.mail.props.fetchsize: 1048576
 email.should.delete.message: false
 email.local.folder.attachments.saved: D:/Attachment/
 email.local.save: true
 email.local.maxFilenameLength: 254
-email.maxProcessedMessagesPerPoll: 50
+email.maxProcessedMessagesPerPoll: 25
 email.pollTimeInSeconds: 5
-email.folder.success: Processed_Messages/PASSED
-email.folder.failure: Processed_Messages/FAILED
 mq.connection: tcp://localhost:61616
 mq.outbound.queue: GTAS_INBOUND_Q_REDIS
 mq.concurrency: 1-1

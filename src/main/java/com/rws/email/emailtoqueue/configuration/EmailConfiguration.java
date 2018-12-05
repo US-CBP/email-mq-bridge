@@ -6,13 +6,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.task.TaskExecutor;
+import org.springframework.integration.mail.ImapIdleChannelAdapter;
 import org.springframework.integration.mail.ImapMailReceiver;
-import org.springframework.integration.mail.MailReceiver;
-import org.springframework.integration.mail.MailReceivingMessageSource;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.integration.mail.SearchTermStrategy;
 import org.springframework.stereotype.Component;
 
+import javax.mail.Flags;
+import javax.mail.Folder;
+import javax.mail.search.FlagTerm;
+import javax.mail.search.SearchTerm;
 import java.util.Properties;
 
 @Configuration
@@ -32,36 +34,45 @@ public class EmailConfiguration {
     private final
     Properties javaMailProperties;
 
-    private final
-    ReceiverSearchTerms receiverSearchTerms;
-
     @Autowired
-    public EmailConfiguration(@Qualifier("javaProperties") Properties javaMailProperties, ReceiverSearchTerms receiverSearchTerms) {
+    public EmailConfiguration(@Qualifier("javaProperties") Properties javaMailProperties) {
         this.javaMailProperties = javaMailProperties;
-        this.receiverSearchTerms = receiverSearchTerms;
     }
 
     @Bean
-    @Qualifier("inboundMessageAdapter")
-    MailReceivingMessageSource mailReceivingMessageSource() {
-        return new MailReceivingMessageSource(imapMailReceiver());
+    @Qualifier("imapIdleAdapter")
+    ImapIdleChannelAdapter imapIdleAdapter() {
+        return new ImapIdleChannelAdapter(imapMailReceiver());
     }
 
     @Bean
-    MailReceiver imapMailReceiver() {
+    ImapMailReceiver imapMailReceiver() {
         ImapMailReceiver imapMailReceiver = new ImapMailReceiver(emailUrl);
         imapMailReceiver.setShouldDeleteMessages(shouldDeleteMessage);
         imapMailReceiver.setJavaMailProperties(javaMailProperties);
-        imapMailReceiver.setSearchTermStrategy(receiverSearchTerms);
+        imapMailReceiver.setMaxFetchSize(maxProcessedMessagesPerPoll);
+        imapMailReceiver.setSearchTermStrategy(searchTermsForImap());
         return imapMailReceiver;
     }
 
-    @Bean
-    @Qualifier("emailTaskExecutor")
-    TaskExecutor taskExecutor() {
-        ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
-        taskExecutor.setCorePoolSize(maxProcessedMessagesPerPoll);
-        return taskExecutor;
+    private SearchTermStrategy searchTermsForImap() {
+        return new ReceiverSearchTerms();
     }
 
+    public class ReceiverSearchTerms implements SearchTermStrategy {
+        @Override
+        public SearchTerm generateSearchTerm(Flags flags, Folder folder) {
+            return new FlagTerm(new Flags(Flags.Flag.SEEN), false);
+        }
+    }
+
+
+    /*
+Configuration for Mail Receiving Source - use this if IMAP IDLE is not supported!
+    @Bean
+    @Qualifier("imapPollingAdapter")
+    MailReceivingMessageSource mailReceivingMessageSource() {
+        return new MailReceivingMessageSource(imapMailReceiver());
+    }
+*/
 }
