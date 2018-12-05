@@ -39,35 +39,6 @@ public class EmailFlow {
         this.attachmentSplitter = attachmentSplitter;
     }
 
-/*
-
-    private final
-    ImapIdleChannelAdapter imapIdleChannelAdapter;
-
-    private final
-    JmsTemplate jmsTemplateFile;
-
-    @Value("${email.maxProcessedMessagesPerPoll}")
-    Integer maxThreadsPerPoll;
-    @Value("${email.pollTimeInSeconds}")
-    Integer pollTimeInSeconds;
-
-
-    IntegrationFlow pollingFlow() {
-        return IntegrationFlows
-                .from(mailReceivingMessageSource, inboundMailConfig -> inboundMailConfig
-                        .poller(
-                                Pollers.fixedRate(pollTimeInSeconds, TimeUnit.SECONDS)
-                                        .maxMessagesPerPoll(maxThreadsPerPoll)
-                        )
-                )
-                .transform(attachmentTransformer())
-                .split(attachmentSplitter())
-                .handle(this::sendMessage)
-                .get();
-    }
-*/
-
     @Bean
     IntegrationFlow imapIdleFlow() {
         return IntegrationFlows

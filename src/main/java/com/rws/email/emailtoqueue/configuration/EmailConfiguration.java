@@ -65,14 +65,4 @@ public class EmailConfiguration {
             return new FlagTerm(new Flags(Flags.Flag.SEEN), false);
         }
     }
-
-
-    /*
-Configuration for Mail Receiving Source - use this if IMAP IDLE is not supported!
-    @Bean
-    @Qualifier("imapPollingAdapter")
-    MailReceivingMessageSource mailReceivingMessageSource() {
-        return new MailReceivingMessageSource(imapMailReceiver());
-    }
-*/
 }
