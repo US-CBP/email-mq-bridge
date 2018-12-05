@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.integration.annotation.Transformer;
+import org.springframework.integration.support.MessageBuilder;
+import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
 
 import javax.mail.MessagingException;
@@ -15,9 +17,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Component
 @PropertySource("classpath:application.yml")
@@ -35,9 +35,9 @@ public class AttachmentTransformer {
     private Logger logger = LoggerFactory.getLogger(AttachmentTransformer.class);
 
     @Transformer
-    public Attachments transform(MimeMessage payload) throws IOException, MessagingException {
+    public List<Message<?>> transform(MimeMessage payload) throws IOException, MessagingException {
         Map<String, String> attachmentMap = attachmentsAsStringWithFileNameAsKey(payload);
-        return new Attachments(attachmentMap, payload);
+        return createMessages(attachmentMap);
     }
 
     private Map<String, String> attachmentsAsStringWithFileNameAsKey(MimeMessage mimeMessage) throws MessagingException, IOException {
@@ -65,5 +65,19 @@ public class AttachmentTransformer {
             fileName = fileName.substring(0, MAX_FILE_NAME_LENGTH);
         }
         return fileName;
+    }
+
+    private List<Message<?>> createMessages(Map<String, String> attachmentMap) {
+        List<Message<?>> jmsMessages = new ArrayList<>();
+        for (String attachmentName : attachmentMap.keySet()) {
+            String payload = attachmentMap.get(attachmentName);
+            Message message = MessageBuilder
+                    .withPayload(payload)
+                    .setHeader("filename", attachmentName)
+                    .build();
+            jmsMessages.add(message);
+            logger.info("Created message for " + attachmentName);
+        }
+        return jmsMessages;
     }
 }

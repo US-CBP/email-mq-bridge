@@ -1,6 +1,5 @@
 package com.rws.email.emailtoqueue;
 
-import com.rws.email.emailtoqueue.flowobjects.AttachmentSplitter;
 import com.rws.email.emailtoqueue.flowobjects.AttachmentTransformer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,19 +27,15 @@ public class EmailFlow {
     private final
     AttachmentTransformer attachmentTransformer;
 
-    private final AttachmentSplitter attachmentSplitter;
-
     private Logger logger = LoggerFactory.getLogger(EmailFlow.class);
 
     @Autowired
     public EmailFlow(ImapIdleChannelAdapter imapIdleChannelAdapter,
                      JmsTemplate jmsTemplateFile,
-                     AttachmentTransformer attachmentTransformer,
-                     AttachmentSplitter attachmentSplitter) {
+                     AttachmentTransformer attachmentTransformer) {
         this.imapIdleChannelAdapter = imapIdleChannelAdapter;
         this.jmsTemplateFile = jmsTemplateFile;
         this.attachmentTransformer = attachmentTransformer;
-        this.attachmentSplitter = attachmentSplitter;
     }
 
     @Bean
@@ -48,7 +43,7 @@ public class EmailFlow {
         return IntegrationFlows
                 .from(imapIdleChannelAdapter)
                 .transform(attachmentTransformer)
-                .split(attachmentSplitter)
+                .split()
                 .handle(this::sendMessage)
                 .get();
     }
