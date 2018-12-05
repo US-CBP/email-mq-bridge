@@ -21,11 +21,15 @@ public class EmailFlow {
 
     private final
     ImapIdleChannelAdapter imapIdleChannelAdapter;
+
     private final
     JmsTemplate jmsTemplateFile;
+
     private final
     AttachmentTransformer attachmentTransformer;
+
     private final AttachmentSplitter attachmentSplitter;
+
     private Logger logger = LoggerFactory.getLogger(EmailFlow.class);
 
     @Autowired
