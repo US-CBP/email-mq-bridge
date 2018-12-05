@@ -23,11 +23,15 @@ public class JavaMailProperties {
     @Value("${email.mail.props.debug}")
     String debug;
 
+    @Value("${email.mail.props.fetchsize}")
+    String fetchSize;
+
     @Bean
     Properties javaProperties() {
         Properties javaMailProperties = new Properties();
         javaMailProperties.setProperty("mail.imap.socketFactory.class", socketFactory);
         javaMailProperties.setProperty("mail.imap.socketFactory.fallback", fallBack);
+        javaMailProperties.setProperty("mail.imaps.fetchsize", fetchSize);
         javaMailProperties.setProperty("mail.store.protocol", protocol);
         javaMailProperties.setProperty("mail.debug", debug);
         return javaMailProperties;

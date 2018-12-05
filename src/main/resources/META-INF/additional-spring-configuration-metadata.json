@@ -79,5 +79,15 @@
       "name": "email.pollTimeInSeconds",
       "type": "java.lang.String",
       "description": "Description for email.pollTimeInSeconds."
+    },
+    {
+      "name": "email.mail.props.fetchsize",
+      "type": "java.lang.String",
+      "description": "Description for email.mail.props.fetchsize."
+    },
+    {
+      "name": "email.imap.idle",
+      "type": "java.lang.String",
+      "description": "Description for email.imap.idle."
     }
   ] }
