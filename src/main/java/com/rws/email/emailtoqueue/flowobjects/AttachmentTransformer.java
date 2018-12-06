@@ -63,7 +63,8 @@ public class AttachmentTransformer {
 
     private String getFileName(MimeBodyPart part) throws MessagingException {
         String fileName = "" + part.hashCode() + UUID.randomUUID() + part.getFileName();
-        if (FOLDER_WHERE_ATTACHMENTS_ARE_SAVED.length() + fileName.length() >= MAX_FILE_NAME_LENGTH) {
+        if (SAVE_ATTACHMENTS_LOCALLY &&
+                FOLDER_WHERE_ATTACHMENTS_ARE_SAVED.length() + fileName.length() >= MAX_FILE_NAME_LENGTH) {
             fileName = fileName.substring(0, MAX_FILE_NAME_LENGTH);
         }
         return fileName;
