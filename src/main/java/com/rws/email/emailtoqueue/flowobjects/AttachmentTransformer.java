@@ -44,17 +44,15 @@ public class AttachmentTransformer {
 
     private Map<String, String> attachmentsAsStringWithFileNameAsKey(MimeMessage payload) throws MessagingException, IOException {
         Map<String, String> attachmentAndName = new HashMap<>();
-        if (payload.getContent() instanceof Multipart) {
-            Multipart multiPart = (Multipart) payload.getContent();
-            for (int i = 0; i < multiPart.getCount(); i++) {
-                MimeBodyPart part = (MimeBodyPart) multiPart.getBodyPart(i);
-                if (Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition())) {
-                    String fileName = getFileName(part);
-                    String attachmentAsString = IOUtils.toString(part.getInputStream(), StandardCharsets.UTF_8);
-                    attachmentAndName.put(fileName, attachmentAsString);
-                    if (SAVE_ATTACHMENTS_LOCALLY) {
-                        saveFile(part, fileName);
-                    }
+        Multipart multiPart = (Multipart) payload.getContent();
+        for (int i = 0; i < multiPart.getCount(); i++) {
+            MimeBodyPart part = (MimeBodyPart) multiPart.getBodyPart(i);
+            if (Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition())) {
+                String fileName = getFileName(part);
+                String attachmentAsString = IOUtils.toString(part.getInputStream(), StandardCharsets.UTF_8);
+                attachmentAndName.put(fileName, attachmentAsString);
+                if (SAVE_ATTACHMENTS_LOCALLY) {
+                    saveFile(part, fileName);
                 }
             }
         }
