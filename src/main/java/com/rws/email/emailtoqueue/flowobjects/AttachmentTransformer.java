@@ -42,10 +42,10 @@ public class AttachmentTransformer {
         return createMessages(attachmentMap);
     }
 
-    private Map<String, String> attachmentsAsStringWithFileNameAsKey(MimeMessage mimeMessage) throws MessagingException, IOException {
+    private Map<String, String> attachmentsAsStringWithFileNameAsKey(MimeMessage payload) throws MessagingException, IOException {
         Map<String, String> attachmentAndName = new HashMap<>();
-        if (mimeMessage.getContent() instanceof Multipart) {
-            Multipart multiPart = (Multipart) mimeMessage.getContent();
+        if (payload.getContent() instanceof Multipart) {
+            Multipart multiPart = (Multipart) payload.getContent();
             for (int i = 0; i < multiPart.getCount(); i++) {
                 MimeBodyPart part = (MimeBodyPart) multiPart.getBodyPart(i);
                 if (Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition())) {
