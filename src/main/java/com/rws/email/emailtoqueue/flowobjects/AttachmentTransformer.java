@@ -1,5 +1,6 @@
 package com.rws.email.emailtoqueue.flowobjects;
 
+import lombok.Data;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
+@Data
 @Component
 @PropertySource("classpath:application.yml")
 public class AttachmentTransformer {
