@@ -44,17 +44,19 @@ public class AttachmentTransformer {
 
     private Map<String, String> attachmentsAsStringWithFileNameAsKey(MimeMessage mimeMessage) throws MessagingException, IOException {
         Map<String, String> attachmentAndName = new HashMap<>();
-        Multipart multiPart = (Multipart) mimeMessage.getContent();
-        for (int i = 0; i < multiPart.getCount(); i++) {
-            MimeBodyPart part = (MimeBodyPart) multiPart.getBodyPart(i);
-            if (Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition())) {
-                String fileName = getFileName(part);
-                String attachmentAsString = IOUtils.toString(part.getInputStream(), StandardCharsets.UTF_8);
-                attachmentAndName.put(fileName, attachmentAsString);
-                if (SAVE_ATTACHMENTS_LOCALLY) {
-                    String path = FOLDER_WHERE_ATTACHMENTS_ARE_SAVED + fileName.replaceAll("\\\\", "");
-                    part.saveFile(path);
-                    logger.info("Saved file to directory with path: " + path);
+        if (mimeMessage.getContent() instanceof Multipart) {
+            Multipart multiPart = (Multipart) mimeMessage.getContent();
+            for (int i = 0; i < multiPart.getCount(); i++) {
+                MimeBodyPart part = (MimeBodyPart) multiPart.getBodyPart(i);
+                if (Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition())) {
+                    String fileName = getFileName(part);
+                    String attachmentAsString = IOUtils.toString(part.getInputStream(), StandardCharsets.UTF_8);
+                    attachmentAndName.put(fileName, attachmentAsString);
+                    if (SAVE_ATTACHMENTS_LOCALLY) {
+                        String path = FOLDER_WHERE_ATTACHMENTS_ARE_SAVED + fileName.replaceAll("\\\\", "");
+                        part.saveFile(path);
+                        logger.info("Saved file to directory with path: " + path);
+                    }
                 }
             }
         }

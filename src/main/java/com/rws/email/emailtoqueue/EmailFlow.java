@@ -50,7 +50,7 @@ public class EmailFlow {
 
     private void sendMessage(Message<?> message) {
         jmsTemplateFile.convertAndSend(message);
-        logger.info("successfully sent message!");
+        logger.info("sent message " + message.getHeaders().get("filename"));
     }
 
 }
