@@ -53,14 +53,22 @@ public class AttachmentTransformer {
                     String attachmentAsString = IOUtils.toString(part.getInputStream(), StandardCharsets.UTF_8);
                     attachmentAndName.put(fileName, attachmentAsString);
                     if (SAVE_ATTACHMENTS_LOCALLY) {
-                        String path = FOLDER_WHERE_ATTACHMENTS_ARE_SAVED + fileName.replaceAll("\\\\", "");
-                        part.saveFile(path);
-                        logger.info("Saved file to directory with path: " + path);
+                        saveFile(part, fileName);
                     }
                 }
             }
         }
         return attachmentAndName;
+    }
+
+    private void saveFile(MimeBodyPart part, String fileName) throws MessagingException {
+        String path = FOLDER_WHERE_ATTACHMENTS_ARE_SAVED + fileName.replaceAll("\\\\", "");
+        try {
+            part.saveFile(path);
+            logger.info("Saved file to directory with path: " + path);
+        } catch (IOException io) {
+            logger.error("FAILED TO WRITE FILE TO PATH. IS SAVE FOLDER CORRECTLY SET?: " + path);
+        }
     }
 
     private String getFileName(MimeBodyPart part) throws MessagingException {
