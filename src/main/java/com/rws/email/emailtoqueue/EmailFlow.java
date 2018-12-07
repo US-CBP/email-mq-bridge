@@ -36,7 +36,8 @@ public class EmailFlow {
     @Autowired
     public EmailFlow(ImapIdleChannelAdapter imapIdleChannelAdapter,
                      JmsTemplate jmsTemplateFile,
-                     AttachmentTransformer attachmentTransformer, AttachmentFilter attachmentFilter) {
+                     AttachmentTransformer attachmentTransformer,
+                     AttachmentFilter attachmentFilter) {
         this.imapIdleChannelAdapter = imapIdleChannelAdapter;
         this.jmsTemplateFile = jmsTemplateFile;
         this.attachmentTransformer = attachmentTransformer;
