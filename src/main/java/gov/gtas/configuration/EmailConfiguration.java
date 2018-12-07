@@ -1,4 +1,9 @@
-package com.rws.email.emailtoqueue.configuration;
+/*
+ * All Application code is Copyright 2016, The Department of Homeland Security (DHS), U.S. Customs and Border Protection (CBP).
+ *
+ * Please see LICENSE.txt for details.
+ */
+package gov.gtas.configuration;
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Qualifier;

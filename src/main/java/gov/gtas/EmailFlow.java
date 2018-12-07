@@ -1,7 +1,12 @@
-package com.rws.email.emailtoqueue;
+/*
+ * All Application code is Copyright 2016, The Department of Homeland Security (DHS), U.S. Customs and Border Protection (CBP).
+ *
+ * Please see LICENSE.txt for details.
+ */
+package gov.gtas;
 
-import com.rws.email.emailtoqueue.flowobjects.AttachmentFilter;
-import com.rws.email.emailtoqueue.flowobjects.AttachmentTransformer;
+import gov.gtas.flowobjects.AttachmentFilter;
+import gov.gtas.flowobjects.AttachmentTransformer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
