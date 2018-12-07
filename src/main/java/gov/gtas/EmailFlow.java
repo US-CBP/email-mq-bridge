@@ -43,6 +43,15 @@ public class EmailFlow {
 
     private final Logger logger = LoggerFactory.getLogger(EmailFlow.class);
 
+    @Value("${email.maxProcessedMessagesPerPoll}")
+    Integer maxThreadsPerPoll;
+
+    @Value("${email.pollTimeInSeconds}")
+    Integer pollTimeInSeconds;
+
+    @Value("${mq.on}")
+    Boolean activeMqOn;
+
     @Autowired
     public EmailFlow(@Qualifier("inboundMessageAdapter") MailReceivingMessageSource mailReceivingMessageSource,
                      JmsTemplate jmsTemplateFile,
@@ -53,11 +62,6 @@ public class EmailFlow {
         this.attachmentTransformer = attachmentTransformer;
         this.attachmentFilter = attachmentFilter;
     }
-
-    @Value("${email.maxProcessedMessagesPerPoll}")
-    Integer maxThreadsPerPoll;
-    @Value("${email.pollTimeInSeconds}")
-    Integer pollTimeInSeconds;
 
     @Bean
     IntegrationFlow imapIdleFlow() {
@@ -75,14 +79,10 @@ public class EmailFlow {
                 .get();
     }
 
-    @Value("${mq.on}")
-    Boolean activeMqOn;
-
     private void sendMessage(Message<?> message) {
         if (activeMqOn) {
             jmsTemplateFile.convertAndSend(message);
         }
         logger.info("processed message " + message.getHeaders().get("filename"));
     }
-
 }
