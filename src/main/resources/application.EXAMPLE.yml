@@ -10,6 +10,7 @@ mq.outbound.queue: GTAS_INBOUND_Q_REDIS
 mq.concurrency: 1-1
 mq.username:
 mq.password:
+mq.on: false
 java-mail-properties:
   java-mail-properties:
     mail.imap.socketFactory.class: "javax.net.ssl.SSLSocketFactory"

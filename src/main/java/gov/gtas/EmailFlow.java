@@ -75,9 +75,14 @@ public class EmailFlow {
                 .get();
     }
 
+    @Value("${mq.on}")
+    Boolean activeMqOn;
+
     private void sendMessage(Message<?> message) {
-        jmsTemplateFile.convertAndSend(message);
-        logger.info("sent message " + message.getHeaders().get("filename"));
+        if (activeMqOn) {
+            jmsTemplateFile.convertAndSend(message);
+        }
+        logger.info("processed message " + message.getHeaders().get("filename"));
     }
 
 }

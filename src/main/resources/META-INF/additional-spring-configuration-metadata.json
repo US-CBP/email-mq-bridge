@@ -59,5 +59,10 @@
       "name": "mq.password",
       "type": "java.lang.String",
       "description": "Description for mq.password."
+    },
+    {
+      "name": "mq.on",
+      "type": "java.lang.String",
+      "description": "Description for mq.on."
     }
   ] }
