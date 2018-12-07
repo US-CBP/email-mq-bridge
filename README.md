@@ -4,7 +4,7 @@ This project is a simple use of spring-integration-flows and the spring-integrat
 Steps to get started:
 Copy application.EXAMPLE.yml into a new file called application.yml in same directory (main/resources/application.yml)
 
-After copying and changing the name of the example file you will need to configure it. The names in the applicaiton.yml file should be descriptive for configuration with a few caveats which I have described below.
+After copying and changing the name of the example file you will need to configure it. The names in the application.yml file should be descriptive for configuration with a few caveats which I have described below.
 
 FOR ANY CONFIGURATION WITH A USERNAME WITH A '@' SIGN : Replace the @ sign with the following '%40'.
 

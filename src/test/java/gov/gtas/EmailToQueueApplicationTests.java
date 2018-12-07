@@ -16,6 +16,7 @@ public class EmailToQueueApplicationTests {
 
     @Test
     public void contextLoads() {
+        assert true;
     }
 
 }

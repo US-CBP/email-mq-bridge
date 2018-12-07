@@ -20,7 +20,7 @@ import java.io.IOException;
 @Component
 public class AttachmentFilter {
 
-    private Logger logger = LoggerFactory.getLogger(AttachmentFilter.class);
+    private final Logger logger = LoggerFactory.getLogger(AttachmentFilter.class);
 
     @SuppressWarnings("WeakerAccess") //this needs to be public for spring flow to pick it up.
     @Filter

@@ -63,7 +63,7 @@ public class EmailConfiguration {
         return new ReceiverSearchTerms();
     }
 
-    public class ReceiverSearchTerms implements SearchTermStrategy {
+    class ReceiverSearchTerms implements SearchTermStrategy {
         @Override
         public SearchTerm generateSearchTerm(Flags flags, Folder folder) {
             return new FlagTerm(new Flags(Flags.Flag.SEEN), false);

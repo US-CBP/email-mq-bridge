@@ -36,7 +36,7 @@ public class EmailFlow {
     private final
     AttachmentFilter attachmentFilter;
 
-    private Logger logger = LoggerFactory.getLogger(EmailFlow.class);
+    private final Logger logger = LoggerFactory.getLogger(EmailFlow.class);
 
     @Autowired
     public EmailFlow(ImapIdleChannelAdapter imapIdleChannelAdapter,
