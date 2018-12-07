@@ -22,6 +22,7 @@ public class AttachmentFilter {
 
     private Logger logger = LoggerFactory.getLogger(AttachmentFilter.class);
 
+    @SuppressWarnings("WeakerAccess") //this needs to be public for spring flow to pick it up.
     @Filter
     public boolean filter(@Payload MimeMessage payload) throws MessagingException, IOException {
         boolean isMultipartMessage = (payload.getContent() instanceof Multipart);
