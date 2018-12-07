@@ -1,8 +1,10 @@
 package com.rws.email.emailtoqueue.configuration;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -17,9 +19,12 @@ import javax.mail.search.FlagTerm;
 import javax.mail.search.SearchTerm;
 import java.util.Properties;
 
+@Data
 @Configuration
 @Component
+@EnableAutoConfiguration
 @PropertySource("classpath:application.yml")
+@ConfigurationProperties(prefix = "java-mail-properties")
 public class EmailConfiguration {
 
     @Value("${email.resource}")
@@ -31,13 +36,7 @@ public class EmailConfiguration {
     @Value("${email.maxProcessedMessagesPerPoll}")
     Integer maxProcessedMessagesPerPoll;
 
-    private final
-    Properties javaMailProperties;
-
-    @Autowired
-    public EmailConfiguration(@Qualifier("javaProperties") Properties javaMailProperties) {
-        this.javaMailProperties = javaMailProperties;
-    }
+    private Properties javaMailProperties;
 
     @Bean
     @Qualifier("imapIdleAdapter")

@@ -1,9 +1,4 @@
 email.resource: imaps://[email-username]:[email password]@imap.gmail.com:993/inbox
-email.mail.props.imap.socketFactory.class: javax.net.ssl.SSLSocketFactory
-email.mail.props.imap.socketFactory.fallback: false
-email.mail.props.store.protocol: imaps
-email.mail.props.debug: false
-email.mail.props.fetchsize: 1048576
 email.should.delete.message: false
 email.local.folder.attachments.saved: D:/Attachment/
 email.local.save: true
@@ -15,3 +10,10 @@ mq.outbound.queue: GTAS_INBOUND_Q_REDIS
 mq.concurrency: 1-1
 mq.username:
 mq.password:
+java-mail-properties:
+  java-mail-properties:
+    mail.imap.socketFactory.class: "javax.net.ssl.SSLSocketFactory"
+    mail.imap.socketFactory.fallback: "false"
+    mail.imaps.fetchsize: "1048576"
+    mail.store.protocol: "protocol"
+    mail.debug: "false"
