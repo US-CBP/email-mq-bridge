@@ -70,7 +70,6 @@ public class AttachmentTransformerTest {
         when(mimeBodyPart.getInputStream()).thenReturn(IOUtils.toInputStream(PAYLOAD_ONE));
         when(mimeBodyPart2.getInputStream()).thenReturn(IOUtils.toInputStream(PAYLOAD_TWO));
         when(mimeMessage.getContent()).thenReturn(mimeMultipart);
-        when(mimeMessage.getFolder()).thenReturn(null);
     }
 
     @Test

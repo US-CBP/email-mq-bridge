@@ -13,8 +13,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.integration.mail.ImapIdleChannelAdapter;
 import org.springframework.integration.mail.ImapMailReceiver;
+import org.springframework.integration.mail.MailReceivingMessageSource;
 import org.springframework.integration.mail.SearchTermStrategy;
 import org.springframework.stereotype.Component;
 
@@ -44,9 +44,9 @@ public class EmailConfiguration {
     private Properties javaMailProperties;
 
     @Bean
-    @Qualifier("imapIdleAdapter")
-    ImapIdleChannelAdapter imapIdleAdapter() {
-        return new ImapIdleChannelAdapter(imapMailReceiver());
+    @Qualifier("inboundMessageAdapter")
+    MailReceivingMessageSource mailReceivingMessageSource() {
+        return new MailReceivingMessageSource(imapMailReceiver());
     }
 
     @Bean

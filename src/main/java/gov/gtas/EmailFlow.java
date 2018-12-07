@@ -10,14 +10,19 @@ import gov.gtas.flowobjects.AttachmentTransformer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.dsl.IntegrationFlows;
-import org.springframework.integration.mail.ImapIdleChannelAdapter;
+import org.springframework.integration.dsl.Pollers;
+import org.springframework.integration.mail.MailReceivingMessageSource;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
+
+import java.util.concurrent.TimeUnit;
 
 
 @Component
@@ -25,10 +30,10 @@ import org.springframework.stereotype.Component;
 public class EmailFlow {
 
     private final
-    ImapIdleChannelAdapter imapIdleChannelAdapter;
+    JmsTemplate jmsTemplateFile;
 
     private final
-    JmsTemplate jmsTemplateFile;
+    MailReceivingMessageSource mailReceivingMessageSource;
 
     private final
     AttachmentTransformer attachmentTransformer;
@@ -39,20 +44,30 @@ public class EmailFlow {
     private final Logger logger = LoggerFactory.getLogger(EmailFlow.class);
 
     @Autowired
-    public EmailFlow(ImapIdleChannelAdapter imapIdleChannelAdapter,
+    public EmailFlow(@Qualifier("inboundMessageAdapter") MailReceivingMessageSource mailReceivingMessageSource,
                      JmsTemplate jmsTemplateFile,
                      AttachmentTransformer attachmentTransformer,
                      AttachmentFilter attachmentFilter) {
-        this.imapIdleChannelAdapter = imapIdleChannelAdapter;
+        this.mailReceivingMessageSource = mailReceivingMessageSource;
         this.jmsTemplateFile = jmsTemplateFile;
         this.attachmentTransformer = attachmentTransformer;
         this.attachmentFilter = attachmentFilter;
     }
 
+    @Value("${email.maxProcessedMessagesPerPoll}")
+    Integer maxThreadsPerPoll;
+    @Value("${email.pollTimeInSeconds}")
+    Integer pollTimeInSeconds;
+
     @Bean
     IntegrationFlow imapIdleFlow() {
         return IntegrationFlows
-                .from(imapIdleChannelAdapter)
+                .from(mailReceivingMessageSource, inboundMailConfig -> inboundMailConfig
+                        .poller(
+                                Pollers.fixedDelay(pollTimeInSeconds, TimeUnit.SECONDS)
+                                        .maxMessagesPerPoll(maxThreadsPerPoll)
+                        )
+                )
                 .filter(attachmentFilter)
                 .transform(attachmentTransformer)
                 .split()
