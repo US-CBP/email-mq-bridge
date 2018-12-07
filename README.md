@@ -31,5 +31,5 @@ To run type mvn spring-boot:run in command line. You can also install the progra
 
 `java -jar .\email-to-queue-0.0.1-SNAPSHOT.jar`
 
-Please note, there is a current bug with Spring 5.0 and so this project uses an earlier version of spring. The bug can be found here:
+Please note, there is a current bug with Spring 2.0.x and so this project uses Spring 1.5.x. The bug can be found here:
 https://jira.spring.io/browse/INT-4299. When the bug is fixed the project should be tested to migrate to the newer version of spring.
