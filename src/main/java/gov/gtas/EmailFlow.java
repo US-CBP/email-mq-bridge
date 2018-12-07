@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.dsl.IntegrationFlows;
-import org.springframework.integration.dsl.Pollers;
+import org.springframework.integration.dsl.core.Pollers;
 import org.springframework.integration.mail.MailReceivingMessageSource;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.messaging.Message;
