@@ -43,6 +43,7 @@ public class AttachmentTransformer {
 
     @Transformer
     public List<Message<?>> transform(MimeMessage payload) throws IOException, MessagingException {
+        logger.info("Transforming message!");
         Map<String, String> attachmentMap = attachmentsAsStringWithFileNameAsKey(payload);
         return createMessages(attachmentMap);
     }

@@ -82,7 +82,9 @@ public class EmailFlow {
     private void sendMessage(Message<?> message) {
         if (activeMqOn) {
             jmsTemplateFile.convertAndSend(message);
+            logger.info("Message put on queue" + message.getHeaders().get("filename"));
+        } else {
+            logger.info("Message processed - MQ is OFF " + message.getHeaders().get("filename"));
         }
-        logger.info("processed message " + message.getHeaders().get("filename"));
     }
 }

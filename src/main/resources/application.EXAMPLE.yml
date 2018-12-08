@@ -1,7 +1,7 @@
 email.resource: imaps://[email-username]:[email password]@imap.gmail.com:993/inbox
 email.should.delete.message: false
 email.local.folder.attachments.saved: D:/Attachment/
-email.local.save: true
+email.local.save: false
 email.local.maxFilenameLength: 254
 email.maxProcessedMessagesPerPoll: 25
 email.pollTimeInSeconds: 5
@@ -16,5 +16,10 @@ java-mail-properties:
     mail.imap.socketFactory.class: "javax.net.ssl.SSLSocketFactory"
     mail.imap.socketFactory.fallback: "false"
     mail.imaps.fetchsize: "1048576"
+    mail.imaps.timeout: "30000"
+    mail.imap.timeout: "30000"
+    mail.imaps.connectiontimeout: "30000"
+    mail.imap.connectiontimeout: "30000"
     mail.store.protocol: "protocol"
+    networkaddress.cache.ttl: "10"
     mail.debug: "false"

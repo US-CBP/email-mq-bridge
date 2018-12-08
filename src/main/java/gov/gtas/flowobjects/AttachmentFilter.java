@@ -26,6 +26,7 @@ public class AttachmentFilter {
     @Filter
     public boolean filter(@Payload MimeMessage payload) throws MessagingException, IOException {
         boolean isMultipartMessage = (payload.getContent() instanceof Multipart);
+        logger.info("Message being filtered!");
         if (!isMultipartMessage) {
             logNonMultipartMessage(payload);
         }
