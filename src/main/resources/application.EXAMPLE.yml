@@ -11,6 +11,12 @@ mq.concurrency: 1-1
 mq.username:
 mq.password:
 mq.on: false
+filter:
+  config:
+    whitelist-on: false
+    whitelisted-emails:
+      - whitelisted email 1
+      - whitelisted email 2
 java-mail-properties:
   java-mail-properties:
     mail.imap.socketFactory.class: "javax.net.ssl.SSLSocketFactory"

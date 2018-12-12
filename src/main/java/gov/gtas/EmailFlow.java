@@ -64,7 +64,7 @@ public class EmailFlow {
     }
 
     @Bean
-    IntegrationFlow imapIdleFlow() {
+    IntegrationFlow imapPollingFlow() {
         return IntegrationFlows
                 .from(mailReceivingMessageSource, inboundMailConfig -> inboundMailConfig
                         .poller(

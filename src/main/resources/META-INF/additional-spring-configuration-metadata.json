@@ -64,5 +64,10 @@
       "name": "mq.on",
       "type": "java.lang.String",
       "description": "Description for mq.on."
+    },
+    {
+      "name": "email-whitelist.safe-emails",
+      "type": "java.lang.String",
+      "description": "Description for email-whitelist.safe-emails."
     }
   ] }
