@@ -16,6 +16,7 @@ import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
 
+import javax.mail.BodyPart;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Part;
@@ -49,18 +50,32 @@ public class AttachmentTransformer {
     }
 
     private Map<String, String> attachmentsAsStringWithFileNameAsKey(MimeMessage payload) throws MessagingException, IOException {
-        Map<String, String> attachmentAndName = new HashMap<>();
         Multipart multiPart = (Multipart) payload.getContent();
-        for (int i = 0; i < multiPart.getCount(); i++) {
-            MimeBodyPart part = (MimeBodyPart) multiPart.getBodyPart(i);
-            if (Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition())) {
-                String fileName = getFileName(part);
-                String attachmentAsString = IOUtils.toString(part.getInputStream(), StandardCharsets.UTF_8);
-                attachmentAndName.put(fileName, attachmentAsString);
-                if (SAVE_ATTACHMENTS_LOCALLY) {
-                    saveFile(part, fileName);
+        Map<String, String> attachmentAndName = new HashMap<>();
+        attachmentAndName = extractAttachments(multiPart, attachmentAndName);
+        return attachmentAndName;
+    }
+
+    private Map<String, String> extractAttachments(Multipart multiPart, Map<String, String> attachmentAndName) {
+        try {
+            for (int i = 0; i < multiPart.getCount(); i++) {
+                BodyPart part = multiPart.getBodyPart(i);
+                if (part.getContent() instanceof Multipart) {
+                    attachmentAndName = extractAttachments((Multipart) part.getContent(), attachmentAndName);
+                } else if (part instanceof MimeBodyPart) {
+                    MimeBodyPart mimeBodyPart = (MimeBodyPart) part;
+                    String fileName = createUniqueFileName(mimeBodyPart.getFileName());
+                    if (Part.ATTACHMENT.equalsIgnoreCase(mimeBodyPart.getDisposition())) {
+                        String attachmentAsString = IOUtils.toString(mimeBodyPart.getInputStream(), StandardCharsets.UTF_8);
+                        attachmentAndName.put(createUniqueFileName(fileName), attachmentAsString);
+                        if (SAVE_ATTACHMENTS_LOCALLY) {
+                            saveFile(mimeBodyPart, fileName);
+                        }
+                    }
                 }
             }
+        } catch (IOException | MessagingException e) {
+            logger.error("Failed to process attachment. Continuing to process other message parts in search of attachments...");
         }
         return attachmentAndName;
     }
@@ -75,8 +90,8 @@ public class AttachmentTransformer {
         }
     }
 
-    private String getFileName(MimeBodyPart part) throws MessagingException {
-        String fileName = "" + part.hashCode() + UUID.randomUUID() + part.getFileName();
+    private String createUniqueFileName(String name) {
+        String fileName = UUID.randomUUID() + name;
         if (SAVE_ATTACHMENTS_LOCALLY &&
                 FOLDER_WHERE_ATTACHMENTS_ARE_SAVED.length() + fileName.length() >= MAX_FILE_NAME_LENGTH) {
             fileName = fileName.substring(0, MAX_FILE_NAME_LENGTH);
