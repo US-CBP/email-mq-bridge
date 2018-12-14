@@ -67,7 +67,7 @@ public class AttachmentTransformer {
                     String fileName = createUniqueFileName(mimeBodyPart.getFileName());
                     if (Part.ATTACHMENT.equalsIgnoreCase(mimeBodyPart.getDisposition())) {
                         String attachmentAsString = IOUtils.toString(mimeBodyPart.getInputStream(), StandardCharsets.UTF_8);
-                        attachmentAndName.put(createUniqueFileName(fileName), attachmentAsString);
+                        attachmentAndName.put(fileName, attachmentAsString);
                         if (SAVE_ATTACHMENTS_LOCALLY) {
                             saveFile(mimeBodyPart, fileName);
                         }
