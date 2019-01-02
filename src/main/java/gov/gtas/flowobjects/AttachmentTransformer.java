@@ -7,6 +7,7 @@ package gov.gtas.flowobjects;
 
 import lombok.Data;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.mail.util.MimeMessageParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -53,7 +54,23 @@ public class AttachmentTransformer {
         Multipart multiPart = (Multipart) payload.getContent();
         Map<String, String> attachmentAndName = new HashMap<>();
         attachmentAndName = extractAttachments(multiPart, attachmentAndName);
+        if (attachmentAndName.isEmpty()) {
+            extractBodyAsFile(payload, attachmentAndName);
+        }
         return attachmentAndName;
+    }
+
+    private void extractBodyAsFile(MimeMessage payload, Map<String, String> attachmentAndName) {
+        try {
+            MimeMessageParser parser = new MimeMessageParser(payload);
+            parser.parse();
+            String fileToSend = parser.getPlainContent();
+            if (fileToSend != null) {
+                attachmentAndName.put(createUniqueFileName("bodyOnlyMessage.txt"), fileToSend);
+            }
+        } catch (Exception e) {
+            logger.error("failure to parse email with no attachments!");
+        }
     }
 
     private Map<String, String> extractAttachments(Multipart multiPart, Map<String, String> attachmentAndName) {
