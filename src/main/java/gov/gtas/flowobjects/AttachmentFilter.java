@@ -15,11 +15,8 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 import javax.mail.Address;
-import javax.mail.MessagingException;
-import javax.mail.Multipart;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,30 +32,9 @@ public class AttachmentFilter {
     private Boolean whitelistOn;
 
     @Filter
-    public boolean filter(@Payload MimeMessage payload) throws MessagingException, IOException {
+    public boolean filter(@Payload MimeMessage payload) {
         logger.info("Message being filtered!");
-        boolean isMultipartMessage = isaMimeMulitpartPayload(payload);
-        boolean isWhiteListedSender = isWhiteListedSender(payload);
-
-        return isMultipartMessage && isWhiteListedSender;
-    }
-
-
-    private boolean isaMimeMulitpartPayload(@Payload MimeMessage payload) throws IOException, MessagingException {
-        boolean isMultipartMessage = payload.getContent() instanceof Multipart;
-        if (!isMultipartMessage) {
-            logNonMultipartMessage(payload);
-        }
-        return isMultipartMessage;
-    }
-
-    private void logNonMultipartMessage(@Payload MimeMessage payload) {
-        try {
-            String subject = payload.getSubject();
-            logger.info("Ignoring non-multipart message with subject: " + subject);
-        } catch (Exception ignored) {
-            logger.info("Ignoring non-multipart message. Failed to extract subject.");
-        }
+        return isWhiteListedSender(payload);
     }
 
     private boolean isWhiteListedSender(@Payload MimeMessage payload) {

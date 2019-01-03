@@ -51,12 +51,20 @@ public class AttachmentTransformer {
     }
 
     private Map<String, String> attachmentsAsStringWithFileNameAsKey(MimeMessage payload) throws MessagingException, IOException {
-        Multipart multiPart = (Multipart) payload.getContent();
         Map<String, String> attachmentAndName = new HashMap<>();
-        attachmentAndName = extractAttachments(multiPart, attachmentAndName);
-        if (attachmentAndName.isEmpty()) {
+        if (payload.getContent() instanceof Multipart) {
+            Multipart multiPart = (Multipart) payload.getContent();
+            attachmentAndName = extractAttachments(multiPart, attachmentAndName);
+            if (attachmentAndName.isEmpty()) {
+                extractBodyAsFile(payload, attachmentAndName);
+            }
+        } else {
             extractBodyAsFile(payload, attachmentAndName);
         }
+        if (attachmentAndName.isEmpty()) {
+            logger.warn("Email with null body and no attachments received! No message was processed!");
+        }
+
         return attachmentAndName;
     }
 
