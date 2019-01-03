@@ -73,7 +73,7 @@ public class AttachmentTransformer {
             MimeMessageParser parser = new MimeMessageParser(payload);
             parser.parse();
             String fileToSend = parser.getPlainContent();
-            if (fileToSend != null) {
+            if (fileToSend != null && !fileToSend.trim().isEmpty()) {
                 attachmentAndName.put(createUniqueFileName("bodyOnlyMessage.txt"), fileToSend);
             }
         } catch (Exception e) {
