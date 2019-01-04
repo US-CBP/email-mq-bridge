@@ -40,16 +40,6 @@ public class AttachmentFilterTest {
     }
 
     @Test
-    public void mimeMultipartContentNegative() throws IOException, MessagingException {
-        AttachmentFilter attachmentFilter = new AttachmentFilter();
-        attachmentFilter.setWhitelistOn(false);
-        mimeMessage = mock(MimeMessage.class);
-        Object notAMimeMultipart = new Object();
-        when(mimeMessage.getContent()).thenReturn(notAMimeMultipart);
-        Assert.assertFalse(attachmentFilter.filter(mimeMessage));
-    }
-
-    @Test
     public void whitelistEmailNoSender() throws IOException, MessagingException {
         AttachmentFilter attachmentFilter = new AttachmentFilter();
         attachmentFilter.setWhitelistOn(true);
