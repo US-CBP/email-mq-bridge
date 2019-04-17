@@ -24,6 +24,3 @@ java-mail-properties:
     mail.imap.socketFactory.class: "javax.net.ssl.SSLSocketFactory"  
 
 To run run a mvn install to get the war. Put the application.yml in the /bin folder and deploy the application to the server.
-
-Please note, there is a current bug with Spring 2.0.x and so this project uses Spring 1.5.x. The bug can be found here:
-https://jira.spring.io/browse/INT-4299. When the bug is fixed the project should be tested to migrate to the newer version of spring.
