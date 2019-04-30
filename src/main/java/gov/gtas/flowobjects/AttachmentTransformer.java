@@ -23,9 +23,12 @@ import javax.mail.Multipart;
 import javax.mail.Part;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+
+import static org.apache.commons.io.FileUtils.writeStringToFile;
 
 @Data
 @Component
@@ -74,7 +77,12 @@ public class AttachmentTransformer {
             parser.parse();
             String fileToSend = parser.getPlainContent();
             if (fileToSend != null && !fileToSend.trim().isEmpty()) {
-                attachmentAndName.put(createUniqueFileName("bodyOnlyMessage.txt"), fileToSend);
+                String fileName = createUniqueFileName("bodyOnlyMessage.txt");
+                attachmentAndName.put(fileName, fileToSend);
+                if (SAVE_ATTACHMENTS_LOCALLY) {
+                    String path = FOLDER_WHERE_ATTACHMENTS_ARE_SAVED + fileName.replaceAll("\\\\", "");
+                    writeStringToFile(new File(path), fileToSend );
+                }
             }
         } catch (Exception e) {
             logger.error("failure to parse email with no attachments!");
