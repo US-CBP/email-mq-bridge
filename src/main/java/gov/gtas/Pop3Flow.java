@@ -4,6 +4,7 @@ import gov.gtas.flowobjects.AttachmentFilter;
 import gov.gtas.flowobjects.AttachmentTransformer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -46,7 +47,8 @@ public class Pop3Flow {
     @Value("${mq.on}")
     Boolean activeMqOn;
 
-    public Pop3Flow(JmsTemplate jmsTemplateFile, @Qualifier("pop3Adapter") MailReceivingMessageSource mailReceivingMessageSource, AttachmentTransformer attachmentTransformer, AttachmentFilter attachmentFilter) {
+    @Autowired
+    public Pop3Flow(@Qualifier("pop3Adapter") MailReceivingMessageSource mailReceivingMessageSource, JmsTemplate jmsTemplateFile, AttachmentTransformer attachmentTransformer, AttachmentFilter attachmentFilter) {
         this.jmsTemplateFile = jmsTemplateFile;
         this.mailReceivingMessageSource = mailReceivingMessageSource;
         this.attachmentTransformer = attachmentTransformer;

@@ -74,5 +74,15 @@
       "name": "email.imap.delete.message",
       "type": "java.lang.String",
       "description": "Description for email.imap.delete.message."
+    },
+    {
+      "name": "filter.config.whitelisted-emails",
+      "type": "java.lang.String",
+      "description": "Description for filter.config.whitelisted-emails."
+    },
+    {
+      "name": "filter.config.whitelist-on",
+      "type": "java.lang.String",
+      "description": "Description for filter.config.whitelist-on."
     }
   ] }

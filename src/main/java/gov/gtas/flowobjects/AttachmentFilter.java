@@ -31,8 +31,9 @@ public class AttachmentFilter {
     private List<String> whitelistedEmails;
     private Boolean whitelistOn;
 
+    @SuppressWarnings("WeakerAccess") // NEEDED for transformer.
     @Filter
-    boolean filter(@Payload MimeMessage payload) {
+    public boolean filter(@Payload MimeMessage payload) {
         logger.info("Message being filtered!");
         return isWhiteListedSender(payload);
     }
