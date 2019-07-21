@@ -32,7 +32,7 @@ public class AttachmentFilter {
     private Boolean whitelistOn;
 
     @Filter
-    public boolean filter(@Payload MimeMessage payload) {
+    boolean filter(@Payload MimeMessage payload) {
         logger.info("Message being filtered!");
         return isWhiteListedSender(payload);
     }
