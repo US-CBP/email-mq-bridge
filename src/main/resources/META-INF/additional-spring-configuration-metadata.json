@@ -6,11 +6,6 @@
       "description": "Description for email.resource."
     },
     {
-      "name": "email.should.delete.message",
-      "type": "java.lang.String",
-      "description": "Description for email.should.delete.message."
-    },
-    {
       "name": "email.local.folder.attachments.saved",
       "type": "java.lang.String",
       "description": "Description for email.local.folder.attachments.saved."
@@ -69,5 +64,15 @@
       "name": "email-whitelist.safe-emails",
       "type": "java.lang.String",
       "description": "Description for email-whitelist.safe-emails."
+    },
+    {
+      "name": "email.protocol",
+      "type": "java.lang.String",
+      "description": "Description for email.protocol."
+    },
+    {
+      "name": "email.imap.delete.message",
+      "type": "java.lang.String",
+      "description": "Description for email.imap.delete.message."
     }
   ] }

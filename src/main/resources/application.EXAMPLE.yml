@@ -1,5 +1,6 @@
 email.resource: imaps://[email-username]:[email password]@imap.gmail.com:993/inbox
-email.should.delete.message: false
+email.protocol: imaps
+email.imap.delete.message: false #IMAP only setting. Pop3 will *always* delete.
 email.local.folder.attachments.saved: D:/Attachment/
 email.local.save: false
 email.local.maxFilenameLength: 254
@@ -17,6 +18,8 @@ filter:
     whitelisted-emails:
       - whitelisted email 1
       - whitelisted email 2
+
+##FOR IMAP
 java-mail-properties:
   java-mail-properties:
     mail.imap.socketFactory.class: "javax.net.ssl.SSLSocketFactory"
@@ -26,6 +29,19 @@ java-mail-properties:
     mail.imap.timeout: "30000"
     mail.imaps.connectiontimeout: "30000"
     mail.imap.connectiontimeout: "30000"
-    mail.store.protocol: "protocol"
+    mail.store.protocol: "imaps"
     networkaddress.cache.ttl: "10"
     mail.debug: "false"
+
+##FOR POP3
+#java-mail-properties:
+#  java-mail-properties:
+#    mail.pop3.socketFactory.class: "javax.net.ssl.SSLSocketFactory"
+#    mail.pop3.socketFactory.fallback: "false"
+#    mail.pop3.timeout: "30000"
+#    mail.pop3.connectiontimeout: "30000"
+#    mail.pop3.rsetbeforequit: false
+#    mail.pop3.port: "995"
+#    mail.store.protocol: "pop3"
+#    networkaddress.cache.ttl: "10"
+#    mail.debug: "true"

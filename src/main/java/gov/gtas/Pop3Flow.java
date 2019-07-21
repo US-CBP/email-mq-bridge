@@ -1,17 +1,12 @@
-/*
- * All Application code is Copyright 2016, The Department of Homeland Security (DHS), U.S. Customs and Border Protection (CBP).
- *
- * Please see LICENSE.txt for details.
- */
 package gov.gtas;
 
 import gov.gtas.flowobjects.AttachmentFilter;
 import gov.gtas.flowobjects.AttachmentTransformer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.integration.dsl.IntegrationFlow;
@@ -24,11 +19,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
 
-
 @Component
+@ConditionalOnProperty(value = "email.protocol", havingValue = "pop3")
 @PropertySource("classpath:application.yml")
-public class EmailFlow {
-
+public class Pop3Flow {
     private final
     JmsTemplate jmsTemplateFile;
 
@@ -41,7 +35,7 @@ public class EmailFlow {
     private final
     AttachmentFilter attachmentFilter;
 
-    private final Logger logger = LoggerFactory.getLogger(EmailFlow.class);
+    private final Logger logger = LoggerFactory.getLogger(Pop3Flow.class);
 
     @Value("${email.maxProcessedMessagesPerPoll}")
     Integer maxThreadsPerPoll;
@@ -52,19 +46,16 @@ public class EmailFlow {
     @Value("${mq.on}")
     Boolean activeMqOn;
 
-    @Autowired
-    public EmailFlow(@Qualifier("inboundMessageAdapter") MailReceivingMessageSource mailReceivingMessageSource,
-                     JmsTemplate jmsTemplateFile,
-                     AttachmentTransformer attachmentTransformer,
-                     AttachmentFilter attachmentFilter) {
-        this.mailReceivingMessageSource = mailReceivingMessageSource;
+    public Pop3Flow(JmsTemplate jmsTemplateFile, @Qualifier("pop3Adapter") MailReceivingMessageSource mailReceivingMessageSource, AttachmentTransformer attachmentTransformer, AttachmentFilter attachmentFilter) {
         this.jmsTemplateFile = jmsTemplateFile;
+        this.mailReceivingMessageSource = mailReceivingMessageSource;
         this.attachmentTransformer = attachmentTransformer;
         this.attachmentFilter = attachmentFilter;
     }
 
     @Bean
-    IntegrationFlow imapPollingFlow() {
+    @ConditionalOnProperty(value = "email.protocol", havingValue = "pop3")
+    IntegrationFlow pop3PollingFlow() {
         return IntegrationFlows
                 .from(mailReceivingMessageSource, inboundMailConfig -> inboundMailConfig
                         .poller(
@@ -79,6 +70,7 @@ public class EmailFlow {
                 .get();
     }
 
+    @SuppressWarnings("Duplicates")
     private void sendMessage(Message<?> message) {
         if (activeMqOn) {
             jmsTemplateFile.send(session -> {

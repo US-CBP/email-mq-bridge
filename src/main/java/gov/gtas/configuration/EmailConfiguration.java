@@ -6,15 +6,16 @@
 package gov.gtas.configuration;
 
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.integration.mail.ImapMailReceiver;
 import org.springframework.integration.mail.MailReceivingMessageSource;
+import org.springframework.integration.mail.Pop3MailReceiver;
 import org.springframework.integration.mail.SearchTermStrategy;
 import org.springframework.stereotype.Component;
 
@@ -35,7 +36,7 @@ public class EmailConfiguration {
     @Value("${email.resource}")
     String emailUrl;
 
-    @Value("${email.should.delete.message}")
+    @Value("${email.imap.delete.message}")
     Boolean shouldDeleteMessage;
 
     @Value("${email.maxProcessedMessagesPerPoll}")
@@ -43,13 +44,30 @@ public class EmailConfiguration {
 
     private Properties javaMailProperties;
 
+    @Bean(value = "pop3Adapter")
+    @ConditionalOnProperty(value = "email.protocol", havingValue = "pop3")
+    MailReceivingMessageSource pop3MailReceivingMessageSource() {
+        return new MailReceivingMessageSource(pop3MailReceiver());
+    }
+
     @Bean
-    @Qualifier("inboundMessageAdapter")
-    MailReceivingMessageSource mailReceivingMessageSource() {
+    @ConditionalOnProperty(value = "email.protocol", havingValue = "pop3")
+    Pop3MailReceiver pop3MailReceiver() {
+        Pop3MailReceiver pop3MailReceiver = new Pop3MailReceiver(emailUrl);
+        pop3MailReceiver.setShouldDeleteMessages(true);
+        pop3MailReceiver.setJavaMailProperties(javaMailProperties);
+        pop3MailReceiver.setMaxFetchSize(maxProcessedMessagesPerPoll);
+        return pop3MailReceiver;
+    }
+
+    @Bean(value = "imapAdapter")
+    @ConditionalOnProperty(value = "email.protocol", havingValue = "imap")
+    MailReceivingMessageSource imapMailReceivingMessageSource() {
         return new MailReceivingMessageSource(imapMailReceiver());
     }
 
     @Bean
+    @ConditionalOnProperty(value = "email.protocol", havingValue = "imap")
     ImapMailReceiver imapMailReceiver() {
         ImapMailReceiver imapMailReceiver = new ImapMailReceiver(emailUrl);
         imapMailReceiver.setShouldDeleteMessages(shouldDeleteMessage);
