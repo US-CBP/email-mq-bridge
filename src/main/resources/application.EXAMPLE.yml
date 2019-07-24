@@ -1,5 +1,5 @@
 email.resource: imaps://[email-username]:[email password]@imap.gmail.com:993/inbox
-email.protocol: imaps
+email.protocol: imap
 email.imap.delete.message: false #IMAP only setting. Pop3 will *always* delete.
 email.local.folder.attachments.saved: D:/Attachment/
 email.local.save: false
