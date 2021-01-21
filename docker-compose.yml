@@ -1,0 +1,12 @@
+version: '3.7'
+services:
+  mq-bridge:
+    image: wcogtas/email-mq-bridge:1.0.0
+    build:
+      context: .
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == node-name
+    container_name: email-mq-bridge
+    restart: always
